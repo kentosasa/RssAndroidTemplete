@@ -10,8 +10,14 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
+import android.widget.Toast
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -32,6 +38,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
+
+        var hello = findViewById(R.id.hello) as TextView
+        hello.setText("ことりん");
+
+        val queue: RequestQueue = Volley.newRequestQueue(applicationContext);
+        val url: String = "https://nichannel.herokuapp.com/api/entries/all"
+        var request = JsonArrayRequest(
+                url,
+                { response ->
+                    Log.d("Volley Success", response.toString())
+                    Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT).show()
+                },
+                { volleyError ->
+                    Log.d("Volley", volleyError.message)
+                    Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
+                }
+        )
+        queue.add(request)
+
+
+
     }
 
     override fun onBackPressed() {
