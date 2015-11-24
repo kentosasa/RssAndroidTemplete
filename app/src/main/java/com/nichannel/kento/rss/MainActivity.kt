@@ -3,21 +3,25 @@ package com.nichannel.kento.rss
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
-import android.view.View
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.nichannel.kento.rss.data.Entries
+import com.nichannel.kento.rss.data.Entry
+import com.nichannel.kento.rss.ui.HomeAdapter
+import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -39,16 +43,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
 
-        var hello = findViewById(R.id.hello) as TextView
-        hello.setText("ことりん");
+        var recyclerView: RecyclerView = findViewById(R.id.recycle_view) as RecyclerView;
+        recyclerView.setHasFixedSize(true); // RecyclerViewのサイズを維持し続ける
+        recyclerView.setLayoutManager(LinearLayoutManager(this));
 
+
+        //ことりんでvolley使ってみた。
         val queue: RequestQueue = Volley.newRequestQueue(applicationContext);
         val url: String = "https://nichannel.herokuapp.com/api/entries/all"
         var request = JsonArrayRequest(
                 url,
                 { response ->
                     Log.d("Volley Success", response.toString())
-                    Toast.makeText(this, response.toString(), Toast.LENGTH_SHORT).show()
+                    var entris: Entries = Entries();
+                    updateHomeView(entris.get_from_json(response))
                 },
                 { volleyError ->
                     Log.d("Volley", volleyError.message)
@@ -59,6 +67,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
 
+    }
+
+    fun updateHomeView(entries: ArrayList<Entry>){
+        var list: RecyclerView = findViewById(R.id.recycle_view) as RecyclerView
+        var layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this);
+        list.setLayoutManager(layoutManager)
+        var adapter: HomeAdapter = HomeAdapter(entries, this);
+        list.setAdapter(adapter)
     }
 
     override fun onBackPressed() {
