@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.nichannel.kento.rss.R;
 import com.nichannel.kento.rss.data.Entry;
@@ -37,6 +38,12 @@ public class FastModeFragment extends Fragment {
                 "  }\n" +
                 "</style>\n";
         webview.loadData("<body>" + entry.getHtml()+css + "</body>", "text/html; charset=utf-8", "utf-8");
+        webview.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+        });
 
 //        View v = inflater.inflate(R.layout.fragment_fast_mode, null);
 //        TextView textView = (TextView)v.findViewById(R.id.html_view);

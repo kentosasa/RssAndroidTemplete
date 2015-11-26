@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.nichannel.kento.rss.R;
 import com.nichannel.kento.rss.data.Entry;
@@ -30,6 +31,12 @@ public class WebViewFragment extends Fragment {
         WebView webview = new WebView(getActivity());
         webview = (WebView)v.findViewById(R.id.webView);
         webview.loadUrl(entry.getUrl());
+        webview.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+        });
         // Inflate the layout for this fragment
         return v;
     }
