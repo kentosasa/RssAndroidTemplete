@@ -2,6 +2,7 @@ package com.nichannel.kento.rss.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Icon;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.joanzapata.iconify.widget.IconButton;
+import com.joanzapata.iconify.widget.IconTextView;
 import com.nichannel.kento.rss.DetailActivity;
 import com.nichannel.kento.rss.R;
 import com.nichannel.kento.rss.data.Entry;
@@ -43,8 +46,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         TextView description;
         TextView siteName;
         ImageView icon;
-        ImageButton expandButton;
-        ImageButton colpaseButton;
+        IconTextView expandButton;
+        IconTextView colpaseButton;
         LinearLayout expandArea;
 
         public ViewHolder(View v) {
@@ -54,8 +57,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
             icon = (ImageView)v.findViewById(R.id.entry_image);
             description = (TextView)v.findViewById(R.id.description);
             expandArea = (LinearLayout) v.findViewById(R.id.expandArea);
-            expandButton = (ImageButton)v.findViewById(R.id.expand_button);
-            colpaseButton = (ImageButton)v.findViewById(R.id.collapse);
+            expandButton = (IconTextView)v.findViewById(R.id.expand_button);
+            colpaseButton = (IconTextView)v.findViewById(R.id.collapse);
 
             title.setOnClickListener(this);
         }
@@ -87,8 +90,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         vh.icon = (ImageView)v.findViewById(R.id.entry_image);
         vh.description = (TextView)v.findViewById(R.id.description);
         vh.expandArea = (LinearLayout) v.findViewById(R.id.expandArea);
-        vh.expandButton = (ImageButton)v.findViewById(R.id.expand_button);
-        vh.colpaseButton = (ImageButton)v.findViewById(R.id.collapse);
+        vh.expandButton = (IconTextView)v.findViewById(R.id.expand_button);
+        vh.colpaseButton = (IconTextView)v.findViewById(R.id.collapse);
 
 
         vh.expandButton.setOnClickListener(new View.OnClickListener() {

@@ -72,9 +72,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
         )
         queue.add(request)
-
-
-
     }
 
     fun updateHomeView(entries: ArrayList<Entry>){
