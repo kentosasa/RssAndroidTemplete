@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.nichannel.kento.rss.data.Entry;
+import com.nichannel.kento.rss.ui.FastModeFragment;
 import com.nichannel.kento.rss.ui.WebViewFragment;
 
 import it.neokree.materialtabs.MaterialTab;
@@ -42,31 +44,28 @@ public class DetailActivity extends AppCompatActivity implements MaterialTabList
         FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                WebViewFragment webViewFragment = new WebViewFragment();
-                return webViewFragment;
+                switch (position){
+                    case 0:
+                        FastModeFragment fastModeFragment = new FastModeFragment();
+                        return fastModeFragment;
+                    case 1:
+                        WebViewFragment webViewFragment = new WebViewFragment();
+                        return webViewFragment;
+                    default:
+                        return null;
+                }
             }
 
             @Override
             public int getCount() {
-                return 1;
+                return 2;
             }
         };
         pager.setAdapter(pagerAdapter);
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 tabHost.setSelectedNavigationItem(position);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                tabHost.setSelectedNavigationItem(position);
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                tabHost.setSelectedNavigationItem(state);
             }
         });
 
@@ -79,12 +78,14 @@ public class DetailActivity extends AppCompatActivity implements MaterialTabList
                                     .setText("FastMode")
                                     .setTabListener(this)
                     );
+                    break;
                 case 1:
                     tabHost.addTab(
                             tabHost.newTab()
                                     .setText("Original")
                                     .setTabListener(this)
                     );
+                    break;
 
             }
         }

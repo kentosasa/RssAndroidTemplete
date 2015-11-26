@@ -1,6 +1,7 @@
 package com.nichannel.kento.rss.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nichannel.kento.rss.DetailActivity;
 import com.nichannel.kento.rss.R;
 import com.nichannel.kento.rss.data.Entry;
 import com.squareup.picasso.Picasso;
@@ -22,8 +24,8 @@ import java.util.ArrayList;
  * Created by Kento on 15/11/22.
  */
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> implements View.OnClickListener {
-    private ArrayList<Entry> entries;
-    private Context context;
+    private static ArrayList<Entry> entries;
+    private static Context context;
     private int expandedPosition = -1;
 
     public HomeAdapter(ArrayList<Entry> entries, Context context ){
@@ -36,7 +38,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
 
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title;
         TextView description;
         TextView siteName;
@@ -45,10 +47,32 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         ImageButton colpaseButton;
         LinearLayout expandArea;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        public ViewHolder(View v) {
+            super(v);
+            title = (TextView)v.findViewById(R.id.title);
+            siteName = (TextView)v.findViewById(R.id.siteName);
+            icon = (ImageView)v.findViewById(R.id.entry_image);
+            description = (TextView)v.findViewById(R.id.description);
+            expandArea = (LinearLayout) v.findViewById(R.id.expandArea);
+            expandButton = (ImageButton)v.findViewById(R.id.expand_button);
+            colpaseButton = (ImageButton)v.findViewById(R.id.collapse);
+
+            title.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            Log.d("クリック", "OnViewHolder");
+            switch (v.getId()){
+                case R.id.title:
+                case R.id.entry_image:
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("entry",entries.get(getAdapterPosition()));
+                    context.startActivity(intent);
+                    break;
+            }
+            getAdapterPosition();
+        }
     }
 
     @Override
@@ -70,12 +94,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         vh.expandButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("Click: ", "されてる！");
-                if (expandedPosition >= 0){
+                if (expandedPosition >= 0) {
                     int prev = expandedPosition;
                     notifyItemChanged(prev);
                 }
-                Log.d("Position: ", expandedPosition+"");
+                Log.d("Position: ", expandedPosition + "");
                 expandedPosition = vh.getAdapterPosition();
                 notifyItemChanged(expandedPosition);
             }
@@ -112,7 +135,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
             holder.expandButton.setVisibility(View.VISIBLE);
         }
     }
-
     @Override
     public int getItemCount() {
         return entries.size();

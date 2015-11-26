@@ -1,11 +1,12 @@
 package com.nichannel.kento.rss.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Kento on 15/11/22.
  */
-public class Entry {
+public class Entry implements Serializable{
     int id;
     String site;
     String title;

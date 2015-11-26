@@ -7,8 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import com.nichannel.kento.rss.R;
+import com.nichannel.kento.rss.data.Entry;
 
 public class WebViewFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -17,12 +19,18 @@ public class WebViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Entry entry = (Entry)getActivity().getIntent().getSerializableExtra("entry");
+        View v = inflater.inflate(R.layout.fragment_web_view, null);
+        WebView webview = new WebView(getActivity());
+        webview = (WebView)v.findViewById(R.id.webView);
+        webview.loadUrl(entry.getUrl());
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_web_view, null);
+        return v;
     }
 }

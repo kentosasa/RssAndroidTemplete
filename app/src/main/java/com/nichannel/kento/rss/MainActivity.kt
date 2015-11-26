@@ -1,5 +1,6 @@
 package com.nichannel.kento.rss
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -31,8 +32,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
-        val fab = findViewById(R.id.fab) as FloatingActionButton
-        fab.setOnClickListener { view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show() }
+//        val fab = findViewById(R.id.fab) as FloatingActionButton
+//        fab.setOnClickListener {
+//            view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+//            KotolinでIntentを書く
+//            val intent = Intent(getApplicationContext(), javaClass<DetailActivity>())
+//            intent.putExtra("test_result",);
+//            startActivity(intent)
+//        }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
