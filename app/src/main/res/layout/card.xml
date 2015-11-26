@@ -61,7 +61,7 @@
 
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/llExpandArea"
+                android:id="@+id/expandArea"
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

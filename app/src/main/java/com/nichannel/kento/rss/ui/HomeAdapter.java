@@ -42,8 +42,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         TextView siteName;
         ImageView icon;
         ImageButton expandButton;
+        ImageButton colpaseButton;
         LinearLayout expandArea;
-
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -62,8 +62,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         vh.siteName = (TextView)v.findViewById(R.id.siteName);
         vh.icon = (ImageView)v.findViewById(R.id.entry_image);
         vh.description = (TextView)v.findViewById(R.id.description);
-        vh.expandArea = (LinearLayout) v.findViewById(R.id.llExpandArea);
+        vh.expandArea = (LinearLayout) v.findViewById(R.id.expandArea);
         vh.expandButton = (ImageButton)v.findViewById(R.id.expand_button);
+        vh.colpaseButton = (ImageButton)v.findViewById(R.id.collapse);
+
 
         vh.expandButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,8 +80,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
                 notifyItemChanged(expandedPosition);
             }
         });
+
+        vh.colpaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int prev = expandedPosition;
+                expandedPosition = -1;
+                notifyItemChanged(prev);
+
+            }
+        });
         return vh;
     }
+
 
     @Override
     public void onBindViewHolder(HomeAdapter.ViewHolder holder, int position) {
@@ -93,8 +106,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
 
         if (position == expandedPosition) {
             holder.expandArea.setVisibility(View.VISIBLE);
+            holder.expandButton.setVisibility(View.GONE);
         } else {
             holder.expandArea.setVisibility(View.GONE);
+            holder.expandButton.setVisibility(View.VISIBLE);
         }
     }
 
