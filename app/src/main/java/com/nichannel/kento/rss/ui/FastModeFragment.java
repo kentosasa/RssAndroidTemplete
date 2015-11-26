@@ -2,18 +2,13 @@ package com.nichannel.kento.rss.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.TextView;
 
 import com.nichannel.kento.rss.R;
 import com.nichannel.kento.rss.data.Entry;
-import com.nichannel.kento.rss.function.ImageGetterImpl;
 
 public class FastModeFragment extends Fragment {
     public FastModeFragment() {

@@ -2,6 +2,8 @@ package com.nichannel.kento.rss.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +40,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
 
     @Override
     public void onClick(View v) {
-
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -46,6 +47,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         TextView description;
         TextView siteName;
         ImageView icon;
+        IconTextView fav;
         IconTextView expandButton;
         IconTextView colpaseButton;
         LinearLayout expandArea;
@@ -59,8 +61,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
             expandArea = (LinearLayout) v.findViewById(R.id.expandArea);
             expandButton = (IconTextView)v.findViewById(R.id.expand_button);
             colpaseButton = (IconTextView)v.findViewById(R.id.collapse);
+            fav = (IconTextView)v.findViewById(R.id.fav);
+
 
             title.setOnClickListener(this);
+            fav.setOnClickListener(this);
+
         }
 
         @Override
@@ -85,18 +91,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
                 .inflate(R.layout.card, parent, false);
         // set the view's size, margins, paddings and layout parameter
         final ViewHolder vh = new ViewHolder(v);
-        vh.title = (TextView)v.findViewById(R.id.title);
-        vh.siteName = (TextView)v.findViewById(R.id.siteName);
-        vh.icon = (ImageView)v.findViewById(R.id.entry_image);
-        vh.description = (TextView)v.findViewById(R.id.description);
-        vh.expandArea = (LinearLayout) v.findViewById(R.id.expandArea);
-        vh.expandButton = (IconTextView)v.findViewById(R.id.expand_button);
-        vh.colpaseButton = (IconTextView)v.findViewById(R.id.collapse);
 
 
         vh.expandButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("ExpandPosition: ", vh.getAdapterPosition()+"");
                 if (expandedPosition >= 0) {
                     int prev = expandedPosition;
                     notifyItemChanged(prev);
@@ -114,6 +114,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
                 expandedPosition = -1;
                 notifyItemChanged(prev);
 
+            }
+        });
+        vh.fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences favs = context.getSharedPreferences("Favs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = favs.edit();
+                String id = "" + entries.get(vh.getAdapterPosition()).getId();
+                entries.get(vh.getAdapterPosition()).setFav(!favs.getBoolean(id, false));
+                editor.putBoolean(id, !favs.getBoolean(id, false));
+                editor.apply();
+                notifyItemChanged(vh.getAdapterPosition());
+                Log.e("Click",""+vh.getAdapterPosition());
             }
         });
         return vh;
@@ -137,6 +150,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
             holder.expandArea.setVisibility(View.GONE);
             holder.expandButton.setVisibility(View.VISIBLE);
         }
+        SharedPreferences favs = context.getSharedPreferences("Favs", Context.MODE_PRIVATE);
+        String id = "" + entries.get(position).getId();
+        if (favs.getBoolean(id, false)){
+            holder.fav.setTextColor(Color.YELLOW);
+            Log.e("ChangeColor", "" + position);
+        }else{
+            holder.fav.setTextColor(Color.GRAY);
+        }
+
     }
     @Override
     public int getItemCount() {

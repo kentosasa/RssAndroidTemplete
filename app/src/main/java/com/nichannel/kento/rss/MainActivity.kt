@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 { response ->
                     Log.d("Volley Success", response.toString())
                     var entris: Entries = Entries();
-                    updateHomeView(entris.get_from_json(response))
+                    updateHomeView(entris.get_from_json(response, this))
                 },
                 { volleyError ->
                     Log.d("Volley", volleyError.message)

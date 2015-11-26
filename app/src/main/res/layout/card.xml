@@ -55,8 +55,7 @@
                         android:id="@+id/fav"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentBottom="true"
-                        android:text="{fa-star-o}"
-                        android:shadowColor="@color/Gray"
+                        android:text="{fa-star}"
                         android:textColor="@color/Gray"
                         android:shadowDx="3"
                         android:shadowDy="3"
@@ -88,40 +87,6 @@
                 </RelativeLayout>
 
             </LinearLayout>
-
-            <!--<LinearLayout-->
-                <!--android:orientation="horizontal"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:gravity="right">-->
-                <!--<com.joanzapata.iconify.widget.IconTextView-->
-                    <!--android:id="@+id/fav"-->
-                    <!--android:text="{fa-star-o}"-->
-                    <!--android:shadowColor="@color/Gray"-->
-                    <!--android:textColor="@color/Gray"-->
-                    <!--android:shadowDx="3"-->
-                    <!--android:shadowDy="3"-->
-                    <!--android:shadowRadius="1"-->
-                    <!--android:textSize="20sp"-->
-                    <!--android:layout_margin="8dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_width="wrap_content"/>-->
-
-                <!--<com.joanzapata.iconify.widget.IconTextView-->
-                    <!--android:id="@+id/expand_button"-->
-                    <!--android:gravity="center"-->
-                    <!--android:text="{fa-angle-down}"-->
-                    <!--android:shadowColor="@color/Gray"-->
-                    <!--android:shadowDx="3"-->
-                    <!--android:shadowDy="3"-->
-                    <!--android:shadowRadius="1"-->
-                    <!--android:textSize="24sp"-->
-                    <!--android:layout_margin="8dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_width="wrap_content"/>-->
-
-            <!--</LinearLayout>-->
-
             <LinearLayout
                 android:id="@+id/expandArea"
                 android:visibility="gone"

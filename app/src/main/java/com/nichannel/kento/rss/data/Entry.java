@@ -15,6 +15,7 @@ public class Entry implements Serializable{
     String text;
     String html;
     String image;
+    boolean fav;
 
     public int getId() {
         return id;
@@ -48,6 +49,10 @@ public class Entry implements Serializable{
         return url;
     }
 
+    public boolean isFav() {
+        return fav;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -78,5 +83,9 @@ public class Entry implements Serializable{
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void setFav(boolean fav) {
+        this.fav = fav;
     }
 }
