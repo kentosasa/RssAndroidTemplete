@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">爆速2chまとめ</string>
+    <string name="new_entry">新着</string>
+    <string name="popular_daily">おすすめ</string>
+    <string name="popular_weekly">週間ランキング</string>
+    <string name="popular_monthly">月間ランキング</string>
+    <string name="fav">お気に入り</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
