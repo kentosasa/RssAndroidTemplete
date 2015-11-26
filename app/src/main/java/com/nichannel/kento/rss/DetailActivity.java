@@ -1,10 +1,12 @@
 package com.nichannel.kento.rss;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -28,7 +30,7 @@ public class DetailActivity extends AppCompatActivity implements MaterialTabList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Entry entry = (Entry)getIntent().getSerializableExtra("entry");
+        final Entry entry = (Entry)getIntent().getSerializableExtra("entry");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,6 +42,27 @@ public class DetailActivity extends AppCompatActivity implements MaterialTabList
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String articleURL = entry.getUrl();
+                String articleTitle = entry.getTitle();
+                String sharedText = articleTitle + " " + articleURL;
+
+                // builderの生成　ShareCompat.IntentBuilder.from(Context context);
+                ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(DetailActivity.this);
+
+                // アプリ一覧が表示されるDialogのタイトルの設定
+                builder.setChooserTitle(R.string.app_name);
+
+                // シェアするタイトル
+                builder.setSubject(articleTitle);
+
+                // シェアするテキスト
+                builder.setText(sharedText);
+
+                // シェアするタイプ（他にもいっぱいあるよ）
+                builder.setType("text/plain");
+
+                // Shareアプリ一覧のDialogの表示
+                builder.startChooser();
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
