@@ -25,6 +25,7 @@ import com.nichannel.kento.rss.data.Entry;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Kento on 15/11/22.

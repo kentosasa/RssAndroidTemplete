@@ -1,5 +1,6 @@
 package com.nichannel.kento.rss
 
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         list.addOnScrollListener(object : EndlessScrollListener(list.layoutManager as LinearLayoutManager) {
             override fun onLoadMore(current_page: Int) {
                 if (loading) return
+                if (url.contains(getString(R.string.entries_url))) return
                 loading = true
                 val queue: RequestQueue = Volley.newRequestQueue(applicationContext);
                 var request = JsonArrayRequest(
@@ -163,7 +165,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             url = getString(R.string.montyly_ranking_url)
             createHomeView()
         } else if (id == R.id.nav_fav) {
+            Log.d("FavURL: ", url);
             url = getString(R.string.entries_url)
+            Log.d("FavURL: ", url);
+            url += "?"
+            Log.d("FavURL: ", url);
+            val favs = getSharedPreferences("Favs", Context.MODE_PRIVATE)
+            val keys = favs.all
+            keys.forEach {
+                Log.d("FavURL: KEY ", it.key);
+                url += "&ids[]=" + it.key
+            }
+            Log.d("FavURL: ", url);
             createHomeView()
         } else if (id == R.id.new_entry) {
             url = getString(R.string.new_entry_url)
