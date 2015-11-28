@@ -1,12 +1,28 @@
 package com.nichannel.kento.rss.data;
 
+import android.app.VoiceInteractor;
+import android.content.Context;
+import android.test.InstrumentationTestCase;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Kento on 15/11/22.
  */
-public class Entry implements Serializable{
+public class Entry extends InstrumentationTestCase implements Serializable{
     int id;
     String site;
     String title;

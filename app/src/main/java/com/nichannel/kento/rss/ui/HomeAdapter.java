@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.widget.IconButton;
 import com.joanzapata.iconify.widget.IconTextView;
@@ -80,7 +81,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
                 case R.id.title:
                 case R.id.entry_image:
                     Intent intent = new Intent(context, DetailActivity.class);
-                    intent.putExtra("entry",entries.get(getAdapterPosition()));
+                    intent.putExtra("entry", entries.get(getAdapterPosition()));
                     context.startActivity(intent);
                     break;
             }
