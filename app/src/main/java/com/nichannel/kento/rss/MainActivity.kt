@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
+import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.Toast
 import com.android.volley.DefaultRetryPolicy
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     internal var url = "https://nichannel.herokuapp.com/api/entries/daily_ranking"
     var loading = false
     protected lateinit var progressBar: ProgressBar
+    protected lateinit var splash: FrameLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         list.setLayoutManager(layoutManager)
 
         progressBar = findViewById(R.id.progress_spinner) as ProgressBar
+        splash = findViewById(R.id.splash) as FrameLayout
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
@@ -78,6 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     var entriesClass: Entries = Entries();
                     setMyAdapter(entriesClass.get_from_json(response, this))
                     progressBar.setVisibility(android.view.View.GONE)
+                    splash.setVisibility(android.view.View.GONE)
                 },
                 { volleyError ->
                     Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
