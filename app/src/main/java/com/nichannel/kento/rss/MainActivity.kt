@@ -16,15 +16,20 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.nichannel.kento.rss.data.Entries
 import com.nichannel.kento.rss.data.Entry
+import com.nichannel.kento.rss.function.EndlessScrollListener
 import com.nichannel.kento.rss.ui.HomeAdapter
 import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    internal var url = "https://nichannel.herokuapp.com/api/entries/daily_ranking"
+    var loading = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +47,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //            startActivity(intent)
 //        }
 
+        //最初に初期化処理をしないとNullPointerを起こす AndroidのError
+        var list: RecyclerView = findViewById(R.id.recycle_view) as RecyclerView
+        var layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this);
+        list.setLayoutManager(layoutManager)
+
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -51,39 +61,64 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener(this)
 
-        var recyclerView: RecyclerView = findViewById(R.id.recycle_view) as RecyclerView;
-        recyclerView.setHasFixedSize(true); // RecyclerViewのサイズを維持し続ける
-        recyclerView.setLayoutManager(LinearLayoutManager(this));
+        createHomeView()
+    }
 
-
+    //HomeViewの生成
+    fun createHomeView(){
         //ことりんでvolley使ってみた。
         val queue: RequestQueue = Volley.newRequestQueue(applicationContext);
-        val url: String = "https://nichannel.herokuapp.com/api/entries/all"
         var request = JsonArrayRequest(
                 url,
                 { response ->
-                    Log.d("Volley Success", response.toString())
-                    var entris: Entries = Entries();
-                    updateHomeView(entris.get_from_json(response, this))
+                    var entriesClass: Entries = Entries();
+                    setMyAdapter(entriesClass.get_from_json(response, this))
                 },
                 { volleyError ->
-                    Log.d("Volley", volleyError.message)
                     Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
                 }
-        )
+        ).setRetryPolicy(DefaultRetryPolicy(5000,
+                3,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
         queue.add(request)
     }
 
-    fun updateHomeView(entries: ArrayList<Entry>){
+    //Adapterを登録する
+    fun setMyAdapter(entries: ArrayList<Entry>){
         var list: RecyclerView = findViewById(R.id.recycle_view) as RecyclerView
         var layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this);
         list.setLayoutManager(layoutManager)
         var adapter: HomeAdapter = HomeAdapter(entries, this);
         list.setAdapter(adapter)
+        list.addOnScrollListener(object : EndlessScrollListener(list.layoutManager as LinearLayoutManager) {
+            override fun onLoadMore(current_page: Int) {
+                Log.d("LoadMore: ", "Page" + current_page)
+                if (loading) return
+                Log.d("LoadMore: ", "Page" + current_page + " Loading")
+                loading = true
+                val queue: RequestQueue = Volley.newRequestQueue(applicationContext);
+                var request = JsonArrayRequest(
+                        url,
+                        { response ->
+                            loading = false
+                            var entriesClass: Entries = Entries();
+                            entries.addAll(entriesClass.get_from_json(response, this@MainActivity))
+                            adapter.notifyDataSetChanged()
+                        },
+                        { volleyError ->
+                            Log.d("VolleryError", "悲しいことにエラーが発生しました。")
+                        }
+                ).setRetryPolicy(DefaultRetryPolicy(5000,
+                        3,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+                queue.add(request)
+
+            }
+        })
     }
 
     override fun onBackPressed() {
-        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        val drawer= findViewById(R.id.drawer_layout) as DrawerLayout
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START)
         } else {
@@ -117,15 +152,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val id = item.itemId
 
         if (id == R.id.popular_daily) {
-            // Handle the camera action
+            url = getString(R.string.daily_ranking_url)
         } else if (id == R.id.popular_weekly) {
-
+            url = getString(R.string.weekly_ranking_url)
         } else if (id == R.id.popular_monthly) {
-
+            url = getString(R.string.montyly_ranking_url)
         } else if (id == R.id.nav_fav) {
-
+            url = getString(R.string.entries_url)
         } else if (id == R.id.new_entry) {
-
+            url = getString(R.string.new_entry_url)
         }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout

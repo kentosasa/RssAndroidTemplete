@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.widget.IconButton;
@@ -50,6 +51,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         IconTextView fav;
         IconTextView expandButton;
         IconTextView colpaseButton;
+        ProgressBar progressBar;
         LinearLayout expandArea;
 
         public ViewHolder(View v) {
@@ -62,6 +64,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
             expandButton = (IconTextView)v.findViewById(R.id.expand_button);
             colpaseButton = (IconTextView)v.findViewById(R.id.collapse);
             fav = (IconTextView)v.findViewById(R.id.fav);
+            progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
 
 
             title.setOnClickListener(this);
@@ -91,7 +94,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
                 .inflate(R.layout.card, parent, false);
         // set the view's size, margins, paddings and layout parameter
         final ViewHolder vh = new ViewHolder(v);
-
 
         vh.expandButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,10 +134,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         return vh;
     }
 
-
     @Override
     public void onBindViewHolder(HomeAdapter.ViewHolder holder, int position) {
-        Log.d(position + "番目: ", entries.get(position).getTitle());
         Entry entry = entries.get(position);
         holder.title.setText(entry.getTitle());
         holder.description.setText(entry.getDescription());
@@ -154,11 +154,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         String id = "" + entries.get(position).getId();
         if (favs.getBoolean(id, false)){
             holder.fav.setTextColor(Color.YELLOW);
-            Log.e("ChangeColor", "" + position);
         }else{
             holder.fav.setTextColor(Color.GRAY);
         }
 
+        if (position == entries.size()-1){
+            holder.progressBar.setVisibility(View.VISIBLE);
+        } else {
+            holder.progressBar.setVisibility(View.GONE);
+        }
     }
     @Override
     public int getItemCount() {

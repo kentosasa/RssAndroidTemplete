@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="com.nichannel.kento.rss.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -24,6 +24,13 @@
         <activity
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity android:name=".function.ExchangeTestActivity" >
+        </activity>
+        <activity
+            android:name=".ExchangeActivity"
+            android:label="@string/title_activity_exchange"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
