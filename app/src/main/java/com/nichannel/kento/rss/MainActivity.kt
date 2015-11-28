@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //            intent.putExtra("test_result",);
 //            startActivity(intent)
 //        }
-
+        url = getString(R.string.new_entry_url)
         //最初に初期化処理をしないとNullPointerを起こす AndroidのError
         var list: RecyclerView = findViewById(R.id.recycle_view) as RecyclerView
         var layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this);
@@ -92,13 +92,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         list.setAdapter(adapter)
         list.addOnScrollListener(object : EndlessScrollListener(list.layoutManager as LinearLayoutManager) {
             override fun onLoadMore(current_page: Int) {
-                Log.d("LoadMore: ", "Page" + current_page)
                 if (loading) return
-                Log.d("LoadMore: ", "Page" + current_page + " Loading")
                 loading = true
                 val queue: RequestQueue = Volley.newRequestQueue(applicationContext);
                 var request = JsonArrayRequest(
-                        url,
+                        url+"?page="+current_page,
                         { response ->
                             loading = false
                             var entriesClass: Entries = Entries();
@@ -153,14 +151,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (id == R.id.popular_daily) {
             url = getString(R.string.daily_ranking_url)
+            createHomeView()
         } else if (id == R.id.popular_weekly) {
             url = getString(R.string.weekly_ranking_url)
+            createHomeView()
         } else if (id == R.id.popular_monthly) {
             url = getString(R.string.montyly_ranking_url)
+            createHomeView()
         } else if (id == R.id.nav_fav) {
             url = getString(R.string.entries_url)
+            createHomeView()
         } else if (id == R.id.new_entry) {
             url = getString(R.string.new_entry_url)
+            createHomeView()
         }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
