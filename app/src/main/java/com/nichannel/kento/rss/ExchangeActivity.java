@@ -9,7 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.nichannel.kento.rss.data.Entry;
 import com.nichannel.kento.rss.function.EndlessScrollListener;
+
+import java.util.ArrayList;
 
 public class ExchangeActivity extends AppCompatActivity {
     String url = getString(R.string.new_entry_url);
@@ -20,6 +23,8 @@ public class ExchangeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ArrayList<Entry> entries = new ArrayList<Entry>();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

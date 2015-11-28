@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     var loading = false
     protected lateinit var progressBar: ProgressBar
     protected lateinit var splash: FrameLayout
+    protected lateinit var queue: RequestQueue
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +58,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         progressBar = findViewById(R.id.progress_spinner) as ProgressBar
         splash = findViewById(R.id.splash) as FrameLayout
+        queue = Volley.newRequestQueue(applicationContext);
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
@@ -74,12 +77,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun createHomeView(){
         progressBar.setVisibility(android.view.View.VISIBLE)
         //ことりんでvolley使ってみた。
-        val queue: RequestQueue = Volley.newRequestQueue(applicationContext);
         var request = JsonArrayRequest(
                 url,
                 { response ->
                     var entriesClass: Entries = Entries();
-                    setMyAdapter(entriesClass.get_from_json(response, this))
+                    var entries: ArrayList<Entry>  = entriesClass.get_from_json(response, this);
+                    setMyAdapter(entries)
                     progressBar.setVisibility(android.view.View.GONE)
                     splash.setVisibility(android.view.View.GONE)
                 },
@@ -99,12 +102,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         list.setLayoutManager(layoutManager)
         var adapter: HomeAdapter = HomeAdapter(entries, this);
         list.setAdapter(adapter)
+        setEntryContent(entries, adapter, url.replace("entries","contents"))
+
+
         list.addOnScrollListener(object : EndlessScrollListener(list.layoutManager as LinearLayoutManager) {
             override fun onLoadMore(current_page: Int) {
                 if (loading) return
                 if (url.contains(getString(R.string.entries_url))) return
                 loading = true
-                val queue: RequestQueue = Volley.newRequestQueue(applicationContext);
                 var request = JsonArrayRequest(
                         url+"?page="+current_page,
                         { response ->
@@ -120,9 +125,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         3,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
                 queue.add(request)
+                setEntryContent(entries, adapter, (url+"?page="+current_page).replace("entries","contents"))
 
             }
         })
+    }
+
+    fun setEntryContent(entries: ArrayList<Entry>, adapter: HomeAdapter, content_url: String) {
+        var request = JsonArrayRequest(
+                content_url,
+                { response ->
+                    loading = false
+                    var entriesClass: Entries = Entries();
+                    val tmp = ArrayList<Entry>()
+                    tmp.addAll(entriesClass.set_content_from_json(response, this@MainActivity, entries))
+                    entries.clear()
+                    entries.addAll(tmp)
+                    adapter.notifyDataSetChanged()
+                },
+                { volleyError ->
+                    Log.d("VolleryError", "悲しいことにエラーが発生しました。")
+                }
+        ).setRetryPolicy(DefaultRetryPolicy(5000,
+                3,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
+        queue.add(request)
     }
 
     override fun onBackPressed() {

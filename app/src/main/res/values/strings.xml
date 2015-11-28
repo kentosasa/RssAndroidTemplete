@@ -19,6 +19,6 @@
     <string name="montyly_ranking_url">https://nichannel.herokuapp.com/api/entries/monthly_ranking</string>
     <string name="all_entry_url">https://nichannel.herokuapp.com/api/entries/all</string>
     <string name="new_entry_url">https://nichannel.herokuapp.com/api/entries/new_entry</string>
-    <string name="entries_url">https://nichannel.herokuapp.com/api/entries/entries</string>
+    <string name="entries_url">https://nichannel.herokuapp.com/api/entries/entry_list</string>
 
 </resources>

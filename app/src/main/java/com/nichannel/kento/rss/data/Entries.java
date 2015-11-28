@@ -28,8 +28,6 @@ public class Entries {
                 entry.setTitle(val.getString("title"));
                 entry.setUrl(val.getString("url"));
                 entry.setDescription(val.getString("description"));
-                entry.setText(val.getString("text"));
-                entry.setHtml(val.getString("html"));
                 entry.setImage(val.getString("image"));
                 entry.setFav(favs.getBoolean(""+val.getInt("id"),false));
                 data.add(entry);
@@ -39,4 +37,24 @@ public class Entries {
         }
         return data;
     }
+
+    public ArrayList<Entry> set_content_from_json(JSONArray raw, Context context, ArrayList<Entry> entries){
+
+        for (int i = 0; i < entries.size(); i++){
+            try {
+                for(int j = 0; j < raw.length(); j++){
+                    JSONObject val = raw.getJSONObject(j);
+                    if(entries.get(i).getId() == val.getInt("entry_id")){
+                        entries.get(i).setText(val.getString("text"));
+                        entries.get(i).setHtml(val.getString("html"));
+                        entries.get(i).setImage(val.getString("image"));
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return entries;
+    }
+
 }
