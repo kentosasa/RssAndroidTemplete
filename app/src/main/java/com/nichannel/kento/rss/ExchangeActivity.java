@@ -13,7 +13,7 @@ import com.nichannel.kento.rss.function.EndlessScrollListener;
 
 public class ExchangeActivity extends AppCompatActivity {
     String url = getString(R.string.new_entry_url);
-
+    String hoge;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
