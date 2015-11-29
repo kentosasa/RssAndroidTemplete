@@ -56,6 +56,7 @@ public class FastModeFragment extends Fragment {
             RequestQueue mQueue = Volley.newRequestQueue(getActivity());
             String url = getActivity().getString(R.string.entries_url).replace("entries", "contents");
             url += "?ids[]=" + entry.getId();
+
             //同期処理サンプル
             final WebView finalWebview = webview;
             final String finalCss = css;

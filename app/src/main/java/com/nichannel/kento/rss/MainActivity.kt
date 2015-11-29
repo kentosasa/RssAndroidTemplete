@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -27,11 +28,13 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    internal var url = "https://nichannel.herokuapp.com/api/entries/daily_ranking"
-    var loading = false
-    protected lateinit var progressBar: ProgressBar
-    protected lateinit var splash: FrameLayout
-    protected lateinit var queue: RequestQueue
+    private  var url = "https://nichannel.herokuapp.com/api/entries/daily_ranking"
+    private var loading = false
+    private  var splash: FrameLayout? = null
+    private  var queue: RequestQueue? = null
+    private var refreshLayout: SwipeRefreshLayout? = null
+    private var list: RecyclerView? = null
+    private var layoutManager: RecyclerView.LayoutManager? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,13 +55,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         //最初に初期化処理をしないとNullPointerを起こす AndroidのError
-        var list: RecyclerView = findViewById(R.id.recycle_view) as RecyclerView
-        var layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this);
-        list.setLayoutManager(layoutManager)
+        list = findViewById(R.id.recycle_view) as RecyclerView
+        layoutManager = LinearLayoutManager(this);
+        (list as RecyclerView).setLayoutManager(layoutManager)
 
-        progressBar = findViewById(R.id.progress_spinner) as ProgressBar
         splash = findViewById(R.id.splash) as FrameLayout
-        queue = Volley.newRequestQueue(applicationContext);
+        refreshLayout = findViewById(R.id.refresh) as SwipeRefreshLayout
+        (refreshLayout as SwipeRefreshLayout).setColorSchemeResources(R.color.colorPrimaryDark, R.color.colorPrimaryDark, R.color.colorPrimaryDark, R.color.colorPrimaryDark)
+        refreshLayout?.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            createHomeView()
+        })
+
+
+        queue = Volley.newRequestQueue(applicationContext)
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
@@ -75,7 +84,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     //HomeViewの生成
     fun createHomeView(){
-        progressBar.setVisibility(android.view.View.VISIBLE)
+        refreshLayout?.setRefreshing(true)
         //ことりんでvolley使ってみた。
         var request = JsonArrayRequest(
                 url,
@@ -83,8 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     var entriesClass: Entries = Entries();
                     var entries: ArrayList<Entry>  = entriesClass.get_from_json(response, this);
                     setMyAdapter(entries)
-                    progressBar.setVisibility(android.view.View.GONE)
-                    splash.setVisibility(android.view.View.GONE)
+                    splash?.setVisibility(android.view.View.GONE)
                 },
                 { volleyError ->
                     Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
@@ -92,7 +100,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ).setRetryPolicy(DefaultRetryPolicy(5000,
                 3,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-        queue.add(request)
+        queue?.add(request)
     }
 
     //Adapterを登録する
@@ -117,6 +125,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             var entriesClass: Entries = Entries();
                             entries.addAll(entriesClass.get_from_json(response, this@MainActivity))
                             adapter.notifyDataSetChanged()
+                            refreshLayout?.setRefreshing(false)
                         },
                         { volleyError ->
                             Log.d("VolleryError", "悲しいことにエラーが発生しました。")
@@ -124,7 +133,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 ).setRetryPolicy(DefaultRetryPolicy(5000,
                         3,
                         DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-                queue.add(request)
+                queue?.add(request)
                 setEntryContent(entries, adapter, (url+"?page="+current_page).replace("entries","contents"))
 
             }
@@ -149,7 +158,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         ).setRetryPolicy(DefaultRetryPolicy(5000,
                 3,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-        queue.add(request)
+        queue?.add(request)
     }
 
     override fun onBackPressed() {

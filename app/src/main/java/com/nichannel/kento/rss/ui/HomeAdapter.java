@@ -91,6 +91,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
 
     @Override
     public HomeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card, parent, false);
@@ -138,6 +139,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
 
     @Override
     public void onBindViewHolder(HomeAdapter.ViewHolder holder, int position) {
+
         Entry entry = entries.get(position);
         holder.title.setText(entry.getTitle());
         holder.description.setText(entry.getDescription());
@@ -152,6 +154,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
             holder.expandArea.setVisibility(View.GONE);
             holder.expandButton.setVisibility(View.VISIBLE);
         }
+
         SharedPreferences favs = context.getSharedPreferences("Favs", Context.MODE_PRIVATE);
         String id = "" + entries.get(position).getId();
         if (favs.getBoolean(id, false)){
@@ -160,7 +163,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
             holder.fav.setTextColor(Color.GRAY);
         }
 
-        if (position == entries.size()-1){
+        if (position == entries.size()-1 && position >= 19){
             holder.progressBar.setVisibility(View.VISIBLE);
         } else {
             holder.progressBar.setVisibility(View.GONE);
