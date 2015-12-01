@@ -25,12 +25,21 @@
         <item>Schuster</item>
     </string-array>
 
-    <!-- TODO: URLs -->
-    <string name="daily_ranking_url">https://nichannel.herokuapp.com/api/entries/daily_ranking</string>
-    <string name="weekly_ranking_url">https://nichannel.herokuapp.com/api/entries/weekly_ranking</string>
-    <string name="montyly_ranking_url">https://nichannel.herokuapp.com/api/entries/monthly_ranking</string>
-    <string name="all_entry_url">https://nichannel.herokuapp.com/api/entries/all</string>
-    <string name="new_entry_url">https://nichannel.herokuapp.com/api/entries/new_entry</string>
-    <string name="entries_url">https://nichannel.herokuapp.com/api/entries/entry_list</string>
+    <!--&lt;!&ndash; HEROKU: URLs &ndash;&gt;-->
+    <!--<string name="daily_ranking_url">https://nichannel.herokuapp.com/api/entries/daily_ranking</string>-->
+    <!--<string name="weekly_ranking_url">https://nichannel.herokuapp.com/api/entries/weekly_ranking</string>-->
+    <!--<string name="montyly_ranking_url">https://nichannel.herokuapp.com/api/entries/monthly_ranking</string>-->
+    <!--<string name="all_entry_url">https://nichannel.herokuapp.com/api/entries/all</string>-->
+    <!--<string name="new_entry_url">https://nichannel.herokuapp.com/api/entries/new_entry</string>-->
+    <!--<string name="entries_url">https://nichannel.herokuapp.com/api/entries/entry_list</string>-->
+
+    <!-- AWS: URLs -->
+    <string name="daily_ranking_url">http://52.34.83.184:80/api/entries/daily_ranking</string>
+    <string name="weekly_ranking_url">http://52.34.83.184:80/api/entries/weekly_ranking</string>
+    <string name="montyly_ranking_url">http://52.34.83.184:80/api/entries/monthly_ranking</string>
+    <string name="all_entry_url">http://52.34.83.184:80/api/entries/all</string>
+    <string name="new_entry_url">http://52.34.83.184:80/api/entries/new_entry</string>
+    <string name="entries_url">http://52.34.83.184:80/api/entries/entry_list</string>
+    <string name="access">http://52.34.83.184:80/api/access_logs/access</string>
 
 </resources>

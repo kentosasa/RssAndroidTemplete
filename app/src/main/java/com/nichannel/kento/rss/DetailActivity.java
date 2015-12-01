@@ -13,9 +13,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.nichannel.kento.rss.data.Entry;
 import com.nichannel.kento.rss.ui.FastModeFragment;
 import com.nichannel.kento.rss.ui.WebViewFragment;
+
+import org.json.JSONObject;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -31,6 +39,22 @@ public class DetailActivity extends AppCompatActivity implements MaterialTabList
         setContentView(R.layout.activity_detail);
 
         final Entry entry = (Entry)getIntent().getSerializableExtra("entry");
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String url = getString(R.string.access);
+        url += "?entry_id=" + entry.getId();
+        queue.add(new JsonObjectRequest(url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }
+        ));
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

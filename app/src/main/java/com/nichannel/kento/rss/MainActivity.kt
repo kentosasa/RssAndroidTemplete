@@ -1,8 +1,11 @@
 package com.nichannel.kento.rss
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v4.widget.SwipeRefreshLayout
@@ -44,14 +47,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         supportActionBar.setTitle(R.string.app_name)
 
-//        val fab = findViewById(R.id.fab) as FloatingActionButton
-//        fab.setOnClickListener {
-//            view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
-//            KotolinでIntentを書く
-//            val intent = Intent(getApplicationContext(), javaClass<DetailActivity>())
-//            intent.putExtra("test_result",);
-//            startActivity(intent)
-//        }
+        val fab = findViewById(R.id.reload) as FloatingActionButton
+        fab.setOnClickListener {
+            view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+///            KotolinでIntentを書く
+            val intent = Intent(getApplicationContext(), javaClass<DetailActivity>())
+            startActivity(intent)
+        }
 
 
         //最初に初期化処理をしないとNullPointerを起こす AndroidのError
@@ -96,6 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 },
                 { volleyError ->
                     Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
         ).setRetryPolicy(DefaultRetryPolicy(5000,
                 3,
