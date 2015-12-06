@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">爆速2chまとめ</string>
+    <string name="app_name">2chまとめ</string>
     <string name="new_entry">新着</string>
     <string name="popular_daily">おすすめ</string>
     <string name="popular_weekly">週間ランキング</string>
     <string name="popular_monthly">月間ランキング</string>
-    <string name="fav">お気に入り</string>
+    <string name="stock">ストック</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -12,6 +12,8 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_exchange">ExchangeActivity</string>
+
+    <string name="analytics">UA-71069081-1</string>
 
     <string-array name="cattegories">
         <item>George</item>
@@ -34,12 +36,12 @@
     <!--<string name="entries_url">https://nichannel.herokuapp.com/api/entries/entry_list</string>-->
 
     <!-- AWS: URLs -->
-    <string name="daily_ranking_url">http://52.34.83.184:80/api/entries/daily_ranking</string>
-    <string name="weekly_ranking_url">http://52.34.83.184:80/api/entries/weekly_ranking</string>
-    <string name="montyly_ranking_url">http://52.34.83.184:80/api/entries/monthly_ranking</string>
-    <string name="all_entry_url">http://52.34.83.184:80/api/entries/all</string>
-    <string name="new_entry_url">http://52.34.83.184:80/api/entries/new_entry</string>
-    <string name="entries_url">http://52.34.83.184:80/api/entries/entry_list</string>
-    <string name="access">http://52.34.83.184:80/api/access_logs/access</string>
+    <string name="daily_ranking_url">http://52.34.83.184:80/nichannel/api/entries/daily_ranking</string>
+    <string name="weekly_ranking_url">http://52.34.83.184:80/nichannel/api/entries/weekly_ranking</string>
+    <string name="montyly_ranking_url">http://52.34.83.184:80/nichannel/api/entries/monthly_ranking</string>
+    <string name="all_entry_url">http://52.34.83.184:80/nichannel/api/entries/all</string>
+    <string name="new_entry_url">http://52.34.83.184:80/nichannel/api/entries/new_entry</string>
+    <string name="entries_url">http://52.34.83.184:80/nichannel/api/entries/entry_list</string>
+    <string name="access">http://52.34.83.184:80/nichannel/api/access_logs/access</string>
 
 </resources>

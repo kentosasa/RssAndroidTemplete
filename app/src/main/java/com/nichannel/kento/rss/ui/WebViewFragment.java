@@ -26,11 +26,15 @@ public class WebViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Entry entry = (Entry)getActivity().getIntent().getSerializableExtra("entry");
+        Entry entry = (Entry    )getActivity().getIntent().getSerializableExtra("entry");
         View v = inflater.inflate(R.layout.fragment_web_view, null);
         WebView webview = new WebView(getActivity());
         webview = (WebView)v.findViewById(R.id.webView);
-        webview.loadUrl(entry.getUrl());
+        if (entry.getWeb() == null){
+            webview.loadUrl(entry.getUrl());
+        } else {
+            webview.loadDataWithBaseURL("", entry.getWeb(), "text/html", "UTF-8", "");
+        }
         webview.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {

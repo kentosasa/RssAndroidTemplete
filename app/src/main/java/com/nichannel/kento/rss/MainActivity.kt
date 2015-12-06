@@ -23,10 +23,14 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.analytics.HitBuilders
+import com.google.android.gms.analytics.Tracker
 import com.nichannel.kento.rss.data.Entries
 import com.nichannel.kento.rss.data.Entry
 import com.nichannel.kento.rss.function.EndlessScrollListener
 import com.nichannel.kento.rss.ui.HomeAdapter
+import hotchemi.android.rate.AppRate
+import java.io.ObjectInputStream
 import java.util.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -47,13 +51,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(toolbar)
         supportActionBar.setTitle(R.string.app_name)
 
-        val fab = findViewById(R.id.reload) as FloatingActionButton
-        fab.setOnClickListener {
-            view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
-///            KotolinでIntentを書く
-            val intent = Intent(getApplicationContext(), javaClass<DetailActivity>())
-            startActivity(intent)
-        }
+        val app = application as MyApplication
+        val t = app.tracker
+        // Classインスタンスから名前取得する場合は難読化に注意.
+        t.setScreenName("MainActivity")
+        t.send(HitBuilders.AppViewBuilder().build())
+
+
+        AppRate.with(this).setInstallDays(3)
+                .setRemindInterval(10) // default 1
+                .setShowLaterButton(true) // default true
+                .monitor();
+
+        AppRate.showRateDialogIfMeetsConditions(this);
+
+//        val fab = findViewById(R.id.reload) as FloatingActionButton
+//        fab.setOnClickListener {
+////            view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show()
+////            KotolinでIntentを書く
+////            val intent = Intent(getApplicationContext(), javaClass<DetailActivity>())
+////            startActivity(intent)
+//        }
 
 
         //最初に初期化処理をしないとNullPointerを起こす AndroidのError
@@ -106,6 +124,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         queue?.add(request)
     }
 
+    fun createFavView() {
+        val favs = getSharedPreferences("Favs", Context.MODE_PRIVATE)
+        var entries: ArrayList<Entry> = ArrayList();
+        val keys = favs.all
+        //Userオブジェクト復元
+        keys.forEach {
+            url += "&ids[]=" + it.key
+            if(favs.getBoolean(it.key, false)){
+                try {
+                val fis = openFileInput(it.key)
+                val ois = ObjectInputStream(fis)
+                val entry = ois.readObject() as Entry
+                ois.close()
+                entries.add(entry)
+                } catch (e: Exception) {
+                    Log.d("InputStream", "Error")
+                }
+            }
+        }
+        Log.d("FavURL: ", url);
+        setMyAdapter(entries)
+        splash?.setVisibility(android.view.View.GONE)
+    }
+
     //Adapterを登録する
     fun setMyAdapter(entries: ArrayList<Entry>){
         var list: RecyclerView = findViewById(R.id.recycle_view) as RecyclerView
@@ -119,7 +161,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         list.addOnScrollListener(object : EndlessScrollListener(list.layoutManager as LinearLayoutManager) {
             override fun onLoadMore(current_page: Int) {
                 if (loading) return
-                if (url.contains(getString(R.string.entries_url))) return
+                if (supportActionBar.title.equals(getString(R.string.stock))) return
                 loading = true
                 var request = JsonArrayRequest(
                         url+"?page="+current_page,
@@ -200,28 +242,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (id == R.id.popular_daily) {
             url = getString(R.string.daily_ranking_url)
+            supportActionBar.setTitle(getString(R.string.popular_daily))
             createHomeView()
         } else if (id == R.id.popular_weekly) {
             url = getString(R.string.weekly_ranking_url)
+            supportActionBar.setTitle(getString(R.string.popular_weekly))
             createHomeView()
         } else if (id == R.id.popular_monthly) {
             url = getString(R.string.montyly_ranking_url)
+            supportActionBar.setTitle(getString(R.string.popular_monthly))
             createHomeView()
         } else if (id == R.id.nav_fav) {
-            Log.d("FavURL: ", url);
+            supportActionBar.setTitle(getString(R.string.stock))
             url = getString(R.string.entries_url)
-            Log.d("FavURL: ", url);
             url += "?"
-            Log.d("FavURL: ", url);
-            val favs = getSharedPreferences("Favs", Context.MODE_PRIVATE)
-            val keys = favs.all
-            keys.forEach {
-                Log.d("FavURL: KEY ", it.key);
-                url += "&ids[]=" + it.key
-            }
-            Log.d("FavURL: ", url);
-            createHomeView()
+            createFavView()
         } else if (id == R.id.new_entry) {
+            supportActionBar.setTitle(getString(R.string.new_entry))
             url = getString(R.string.new_entry_url)
             createHomeView()
         }

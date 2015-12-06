@@ -50,6 +50,7 @@ public class FastModeFragment extends Fragment {
                 "  body {\n" +
                 "    padding: 16px;\n" +
                 "  }\n" +
+                " p {margin-bottom: 18px;}" +
                 "</style>\n";
         if (entry.getHtml() == null) {
             Log.d("HTML追加読み込み", "追加読み込み");

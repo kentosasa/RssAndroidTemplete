@@ -22,7 +22,12 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 }
-
+repositories {
+    maven {
+        // nendSDK
+        url 'http://fan-adn.github.io/nendSDK-Android-lib/library'
+    }
+}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
@@ -46,6 +51,11 @@ dependencies {
     compile 'com.joanzapata.iconify:android-iconify-ionicons:2.1.0' // (v2.0.1)
     compile 'me.zhanghai.android.materialprogressbar:library:1.1.4'
     compile 'com.android.support:support-v4:21.0.+'
+    compile 'com.github.hotchemi:android-rate:0.5.6'
+    compile 'com.google.android.gms:play-services:7.0.0'  // Google Play Service
+    compile 'com.google.android.gms:play-services-analytics:7.0.0' // Google Analytics
+    compile ('net.nend.android:nend-sdk:3.0.1'){ exclude group: 'com.google.android.gms'}
+
 }
 buildscript {
     ext.kotlin_version = '1.0.0-beta-2423'
@@ -55,10 +65,5 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
-
     }
-}
-repositories {
-    mavenCentral()
 }

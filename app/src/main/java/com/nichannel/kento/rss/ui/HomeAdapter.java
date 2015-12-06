@@ -18,6 +18,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.joanzapata.iconify.widget.IconButton;
 import com.joanzapata.iconify.widget.IconTextView;
 import com.nichannel.kento.rss.DetailActivity;
@@ -25,6 +32,14 @@ import com.nichannel.kento.rss.R;
 import com.nichannel.kento.rss.data.Entry;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -124,14 +139,41 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         vh.fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences favs = context.getSharedPreferences("Favs", Context.MODE_PRIVATE);
+                final Entry entry = entries.get(vh.getAdapterPosition());
+                final SharedPreferences favs = context.getSharedPreferences("Favs", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = favs.edit();
-                String id = "" + entries.get(vh.getAdapterPosition()).getId();
+                final String id = "" + entry.getId();
                 entries.get(vh.getAdapterPosition()).setFav(!favs.getBoolean(id, false));
                 editor.putBoolean(id, !favs.getBoolean(id, false));
                 editor.apply();
                 notifyItemChanged(vh.getAdapterPosition());
-                Log.e("Click",""+vh.getAdapterPosition());
+                Log.d("Click", entry.getUrl());
+                RequestQueue queue = Volley.newRequestQueue(context.getApplicationContext());
+                queue.add(new StringRequest(Request.Method.GET, entry.getUrl(), new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.e("response", response);
+                        entry.setWeb(response);
+                        try {
+                            FileOutputStream fos = context.openFileOutput(id, context.MODE_PRIVATE);
+                            ObjectOutputStream oos = new ObjectOutputStream(fos);
+                            oos.writeObject(entry);
+                            oos.close();
+                        } catch (Exception e) {
+                            Log.e("response", e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                },new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("response", error.getMessage());
+
+                        }
+                    }
+
+                ));
             }
         });
         return vh;
@@ -144,7 +186,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         holder.title.setText(entry.getTitle());
         holder.description.setText(entry.getDescription());
         holder.siteName.setText(entry.getSite());
-        Picasso.with(context).load(entry.getImage()).resize(64, 64)
+        Picasso.with(context).load(entry.getImage()).resize(72, 72)
                 .centerCrop().into(holder.icon);
 
         if (position == expandedPosition) {
@@ -158,7 +200,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> im
         SharedPreferences favs = context.getSharedPreferences("Favs", Context.MODE_PRIVATE);
         String id = "" + entries.get(position).getId();
         if (favs.getBoolean(id, false)){
-            holder.fav.setTextColor(Color.YELLOW);
+            holder.fav.setTextColor(context.getResources().getColor(R.color.Yellow));
         }else{
             holder.fav.setTextColor(Color.GRAY);
         }

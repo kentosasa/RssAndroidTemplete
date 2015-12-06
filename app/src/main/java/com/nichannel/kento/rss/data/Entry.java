@@ -23,15 +23,16 @@ import java.util.concurrent.TimeoutException;
  * Created by Kento on 15/11/22.
  */
 public class Entry extends InstrumentationTestCase implements Serializable{
-    int id;
-    String site;
-    String title;
-    String url;
-    String description;
-    String text;
-    String html;
-    String image;
-    boolean fav;
+    int id = 0;
+    String site = null;
+    String title = null;
+    String url = null;
+    String description = null;
+    String text = null;
+    String html = null;
+    String image = null;
+    boolean fav = false;
+    String web = null;
 
     public int getId() {
         return id;
@@ -67,6 +68,14 @@ public class Entry extends InstrumentationTestCase implements Serializable{
 
     public boolean isFav() {
         return fav;
+    }
+
+    public String getWeb() {
+        return web;
+    }
+
+    public void setWeb(String web) {
+        this.web = web;
     }
 
     public void setId(int id) {

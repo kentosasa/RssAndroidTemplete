@@ -19,6 +19,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.nichannel.kento.rss.data.Entry;
 import com.nichannel.kento.rss.ui.FastModeFragment;
 import com.nichannel.kento.rss.ui.WebViewFragment;
@@ -37,6 +39,13 @@ public class DetailActivity extends AppCompatActivity implements MaterialTabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        MyApplication app = (MyApplication) getApplication();
+        Tracker t = app.getTracker();
+        // Classインスタンスから名前取得する場合は難読化に注意.
+        t.setScreenName("DetailActivity");
+        t.send(new HitBuilders.AppViewBuilder().build());
+
 
         final Entry entry = (Entry)getIntent().getSerializableExtra("entry");
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -87,8 +96,6 @@ public class DetailActivity extends AppCompatActivity implements MaterialTabList
 
                 // Shareアプリ一覧のDialogの表示
                 builder.startChooser();
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
             }
         });
 //        ActionBar actionBar = getActionBar();
@@ -103,11 +110,11 @@ public class DetailActivity extends AppCompatActivity implements MaterialTabList
             public Fragment getItem(int position) {
                 switch (position){
                     case 0:
-                        FastModeFragment fastModeFragment = new FastModeFragment();
-                        return fastModeFragment;
-                    case 1:
                         WebViewFragment webViewFragment = new WebViewFragment();
                         return webViewFragment;
+                    case 1:
+                        FastModeFragment fastModeFragment = new FastModeFragment();
+                        return fastModeFragment;
                     default:
                         return null;
                 }
@@ -132,14 +139,14 @@ public class DetailActivity extends AppCompatActivity implements MaterialTabList
                 case 0:
                     tabHost.addTab(
                             tabHost.newTab()
-                                    .setText("FastMode")
+                                    .setText("Original")
                                     .setTabListener(this)
                     );
                     break;
                 case 1:
                     tabHost.addTab(
                             tabHost.newTab()
-                                    .setText("Original")
+                                    .setText("Instant")
                                     .setTabListener(this)
                     );
                     break;

@@ -10,8 +10,8 @@
             android:title="@string/popular_weekly" />
         <item android:id="@+id/popular_monthly" android:icon="@drawable/ic_web_asset_31_white_24dp"
             android:title="@string/popular_monthly"/>
-        <item android:id="@+id/nav_fav" android:icon="@drawable/ic_grade_white_24dp"
-            android:title="@string/fav"/>
+        <item android:id="@+id/nav_fav" android:icon="@drawable/fa_download_48"
+            android:title="@string/stock"/>
     </group>
 
     <!--<item android:title="Communicate">-->
