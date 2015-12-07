@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/Kento/work/Media/Android/rss/app/build/intermediates/exploded-aar/net.nend.android/nend-sdk/3.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="31e2c816dadeca4863f7c79bed4fb2fa05a03435">
+        <dex dex="/Users/Kento/work/Media/Android/rss/app/build/intermediates/pre-dexed/debug/classes-d383713806635df123ab7bf575cc1bbc07b83499.jar" />
+    </item>
+
+</items>
